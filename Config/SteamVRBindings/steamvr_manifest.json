@@ -156,12 +156,32 @@
 			"type": "boolean"
 		},
 		{
+			"name": "/actions/main/in/TriggerLeft",
+			"type": "boolean"
+		},
+		{
+			"name": "/actions/main/in/TriggerRight",
+			"type": "boolean"
+		},
+		{
+			"name": "/actions/main/in/ResetOreintation",
+			"type": "boolean"
+		},
+		{
+			"name": "/actions/main/in/MoveForward,MoveForward X Y_axis2d",
+			"type": "vector2"
+		},
+		{
 			"name": "/actions/main/in/MoveForward axis",
 			"type": "vector1"
 		},
 		{
 			"name": "/actions/main/in/MoveRight axis",
 			"type": "vector1"
+		},
+		{
+			"name": "/actions/main/in/RotateInput,RotateInput X Y_axis2d",
+			"type": "vector2"
 		},
 		{
 			"name": "/actions/main/in/RotateInput axis",
@@ -274,6 +294,106 @@
 		{
 			"controller_type": "vive_tracker_waist",
 			"binding_url": "vive_tracker_waist.json"
+		},
+		{
+			"controller_type": "knuckles",
+			"binding_url": "knuckles.json"
+		},
+		{
+			"controller_type": "vive_controller",
+			"binding_url": "vive_controller.json"
+		},
+		{
+			"controller_type": "vive_cosmos_controller",
+			"binding_url": "vive_cosmos_controller.json"
+		},
+		{
+			"controller_type": "oculus_touch",
+			"binding_url": "oculus_touch.json"
+		},
+		{
+			"controller_type": "holographic_controller",
+			"binding_url": "holographic_controller.json"
+		},
+		{
+			"controller_type": "hpmotioncontroller",
+			"binding_url": "hpmotioncontroller.json"
+		},
+		{
+			"controller_type": "indexhmd",
+			"binding_url": "indexhmd.json"
+		},
+		{
+			"controller_type": "vive",
+			"binding_url": "vive.json"
+		},
+		{
+			"controller_type": "vive_pro",
+			"binding_url": "vive_pro.json"
+		},
+		{
+			"controller_type": "rift",
+			"binding_url": "rift.json"
+		},
+		{
+			"controller_type": "vive_tracker",
+			"binding_url": "vive_tracker.json"
+		},
+		{
+			"controller_type": "vive_tracker_camera",
+			"binding_url": "vive_tracker_camera.json"
+		},
+		{
+			"controller_type": "vive_tracker_waist",
+			"binding_url": "vive_tracker_waist.json"
+		},
+		{
+			"controller_type": "vive_tracker_left_foot",
+			"binding_url": "vive_tracker_left_foot.json"
+		},
+		{
+			"controller_type": "vive_tracker_right_foot",
+			"binding_url": "vive_tracker_right_foot.json"
+		},
+		{
+			"controller_type": "vive_tracker_left_shoulder",
+			"binding_url": "vive_tracker_left_shoulder.json"
+		},
+		{
+			"controller_type": "vive_tracker_right_shoulder",
+			"binding_url": "vive_tracker_right_shoulder.json"
+		},
+		{
+			"controller_type": "vive_tracker_left_elbow",
+			"binding_url": "vive_tracker_left_elbow.json"
+		},
+		{
+			"controller_type": "vive_tracker_right_elbow",
+			"binding_url": "vive_tracker_right_elbow.json"
+		},
+		{
+			"controller_type": "vive_tracker_left_knee",
+			"binding_url": "vive_tracker_left_knee.json"
+		},
+		{
+			"controller_type": "vive_tracker_right_knee",
+			"binding_url": "vive_tracker_right_knee.json"
+		},
+		{
+			"controller_type": "vive_tracker_chest",
+			"binding_url": "vive_tracker_chest.json"
+		},
+		{
+			"controller_type": "vive_tracker_keyboard",
+			"binding_url": "vive_tracker_keyboard.json"
+		},
+		{
+			"controller_type": "vive_tracker_handed",
+			"binding_url": "vive_tracker_handed.json"
+		},
+		{
+			"controller_type": "gamepad",
+			"binding_url": "gamepad.json"
 		}
 	],
 	"localization": [
@@ -310,8 +430,13 @@
 			"/actions/main/in/open_console": "Open Console",
 			"/actions/main/in/GrabLeft": "GrabLeft",
 			"/actions/main/in/GrabRight": "GrabRight",
+			"/actions/main/in/TriggerLeft": "TriggerLeft",
+			"/actions/main/in/TriggerRight": "TriggerRight",
+			"/actions/main/in/ResetOreintation": "ResetOreintation",
+			"/actions/main/in/MoveForward,MoveForward X Y_axis2d": "MoveForward,MoveForward X Y_axis2d",
 			"/actions/main/in/MoveForward axis": "MoveForward",
 			"/actions/main/in/MoveRight axis": "MoveRight",
+			"/actions/main/in/RotateInput,RotateInput X Y_axis2d": "RotateInput,RotateInput X Y_axis2d",
 			"/actions/main/in/RotateInput axis": "RotateInput",
 			"/actions/main": "Main Game Actions"
 		}
