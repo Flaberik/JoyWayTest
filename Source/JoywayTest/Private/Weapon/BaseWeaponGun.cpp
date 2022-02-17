@@ -5,6 +5,7 @@
 
 #include "HandInterface.h"
 #include "Chaos/GeometryParticlesfwd.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -65,9 +66,10 @@ void ABaseWeaponGun::Shoot()
 		GetWorldTimerManager().ClearTimer(ShootTimerHandle);
 		return;
 	}
-
+	
 	SpawnProjectile();
-
+	SpawnParticleFireEffect();
+	
 	if (MagActor)
 		MagActor->BulletAmount -= 1;
 
@@ -86,6 +88,16 @@ void ABaseWeaponGun::SpawnProjectile()
 	SpawnParameters.Owner = this;
 
 	GetWorld()->SpawnActor<ABulletProjectTile>(MagActor->UseBullet, Location, Rotation, SpawnParameters);
+}
+
+void ABaseWeaponGun::SpawnParticleFireEffect()
+{
+	if (ParticleSystemFireEffect == nullptr)
+		return;
+
+	FTransform SpawnTransform = FTransform(ShootInitialPoint->GetComponentRotation(),
+	                                       ShootInitialPoint->GetComponentLocation());
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleSystemFireEffect, SpawnTransform);
 }
 
 void ABaseWeaponGun::UpdateAmmoDisplay()
@@ -124,7 +136,7 @@ void ABaseWeaponGun::UpdateAmmoDisplay()
 
 bool ABaseWeaponGun::CanShoot()
 {
-	if (MagActor != nullptr && MagActor->BulletAmount > 0)
+	if (MagActor != nullptr && MagActor->BulletAmount > 0 && PrimaryHand != nullptr)
 	{
 		return true;
 	}
@@ -197,8 +209,11 @@ void ABaseWeaponGun::StartShoot_Implementation(AActor* Hand)
 	if (!(Hand && Hand == PrimaryHand))
 		return;
 
+	// Первый Выстрел, потом стреляет автоматически если кнопка зажата
+	Shoot();
+	
 	float ShootTimerDelay = 60.0f / FireRateInMinute;
-	GetWorld()->GetTimerManager().SetTimer(ShootTimerHandle, this, &ABaseWeaponGun::Shoot, ShootTimerDelay, true);
+	GetWorld()->GetTimerManager().SetTimer(ShootTimerHandle, this, &ABaseWeaponGun::Shoot, ShootTimerDelay, true,ShootTimerDelay);
 }
 
 // Вызыввается когда игрок отпускает кнопку стрельбы (Сработает если это главная рука)
@@ -216,7 +231,7 @@ void ABaseWeaponGun::EndShoot_Implementation(AActor* Hand)
 void ABaseWeaponGun::Drop_Implementation(AActor* Hand)
 {
 	IPickUpInterface::Drop_Implementation(Hand);
-
+	
 	if (Hand == PrimaryHand)
 	{
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
@@ -230,6 +245,11 @@ void ABaseWeaponGun::Drop_Implementation(AActor* Hand)
 	{
 		TryReleaseSecondaryHand();
 	}
+}
+
+UPrimitiveComponent* ABaseWeaponGun::GetPhysicsComponent_Implementation()
+{
+	return SM_Gun;
 }
 
 void ABaseWeaponGun::TryReleasePrimaryHand()
@@ -275,6 +295,7 @@ void ABaseWeaponGun::RotateGunByHands()
 		SM_Gun->SetWorldRotation(LookRotator);
 	}
 }
+
 
 void ABaseWeaponGun::MagDetectorOnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
                                                UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,

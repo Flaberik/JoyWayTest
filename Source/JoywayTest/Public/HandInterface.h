@@ -28,6 +28,12 @@ public:
 	UFUNCTION(Category="Interaction", BlueprintCallable, BlueprintNativeEvent)
 	void ReleaseActor();
 
+	UFUNCTION(Category="Interaction", BlueprintCallable, BlueprintNativeEvent)
+	void TriggerPressed();
+
+	UFUNCTION(Category="Interaction", BlueprintCallable, BlueprintNativeEvent)
+	void TriggerReleased();
+
 	UFUNCTION(Category="State", BlueprintCallable, BlueprintNativeEvent)
 	void SetHandVisibleState(bool Visible);
 };

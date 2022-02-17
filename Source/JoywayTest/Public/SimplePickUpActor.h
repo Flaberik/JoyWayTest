@@ -31,5 +31,6 @@ public:
 	
 	virtual void PickUp_Implementation(USceneComponent* AttachTo) override;
 	virtual void Drop_Implementation(AActor* Hand) override;
+	virtual UPrimitiveComponent* GetPhysicsComponent_Implementation() override;
 	
 };

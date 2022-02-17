@@ -22,28 +22,28 @@ public:
 	// Sets default values for this actor's properties
 	ABaseWeaponGun();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* SM_Gun;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* SM_PrimaryHand;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* SM_SecondaryHand;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	USceneComponent* ShootInitialPoint;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UArrowComponent* ShootDirectionArrow;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	USceneComponent* MagPointSocket;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UBoxComponent* MagDetector;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UTextRenderComponent* AmmoDisplay;
 
 protected:
@@ -64,6 +64,9 @@ public:
 	FColor HalfAmmoDisplayColor;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FColor LowAmmoDisplayColor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UParticleSystem* ParticleSystemFireEffect;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<ABaseMag> AvailableMag;
@@ -89,33 +92,45 @@ public:
 	virtual void PickUp_Implementation(USceneComponent* AttachTo) override;
 	virtual void Drop_Implementation(AActor* Hand) override;
 
+	virtual UPrimitiveComponent* GetPhysicsComponent_Implementation() override;
+
 	FTimerHandle ShootTimerHandle;
 
 	UFUNCTION()
 	bool CanShoot();
 
-private:
 	UFUNCTION()
 	void Shoot();
+	
 	UFUNCTION()
 	void SpawnProjectile();
-	UFUNCTION()
+	
+	UFUNCTION(BlueprintCallable)
 	void UpdateAmmoDisplay();
+	
 	UFUNCTION()
 	bool TryGrabPrimaryHand(USceneComponent* AttachTo);
+	
 	UFUNCTION()
 	void TryGrabSecondaryHand(USceneComponent* AttachTo);
+	
 	UFUNCTION()
 	void TryReleasePrimaryHand();
+	
 	UFUNCTION()
 	void TryReleaseSecondaryHand();
+	
 	UFUNCTION()
 	void RotateGunByHands();
+	
+	UFUNCTION()
+	void SpawnParticleFireEffect();
 	
 	UFUNCTION()
 	void MagDetectorOnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	                               UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 	                               const FHitResult& SweepResult);
+	
 	UFUNCTION()
 	void MagDetectorOnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	                             UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);

@@ -27,5 +27,7 @@ public:
 
 	UFUNCTION(Category="Interaction", BlueprintCallable, BlueprintNativeEvent)
 	void Drop(AActor* Hand);
-	
+
+	UFUNCTION(Category="Physics", BlueprintCallable, BlueprintNativeEvent)
+	UPrimitiveComponent* GetPhysicsComponent();
 };

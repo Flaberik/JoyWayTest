@@ -4,6 +4,8 @@
 #include "Weapon/BulletProjectTile.h"
 
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Particles/ParticleSystem.h"
 #include "Weapon/DamageIndicator.h"
 
 ABulletProjectTile::ABulletProjectTile()
@@ -29,20 +31,12 @@ void ABulletProjectTile::BeginPlay()
 void ABulletProjectTile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                                FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (HitComp)
+	if (OtherComp->IsSimulatingPhysics())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,
-		                                 FString::Printf(TEXT("%s, %i"), *HitComp->GetName(), int(HitComp->IsSimulatingPhysics())));
-	}
-	if (HitComp->IsSimulatingPhysics())
-	{
-		HitComp->AddImpulse(ProjectileMovementComponent->Velocity);
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,
-		                                 FString::Printf(
-			                                 TEXT("%s"), *ProjectileMovementComponent->Velocity.ToString()));
+		OtherComp->AddImpulse(ProjectileMovementComponent->Velocity);
 	}
 
-	if (OtherActor != NULL)
+	if (OtherActor != nullptr)
 	{
 		// Если есть физ материал наносим урон и спавним виджет (Индиктор урона)
 		if (Hit.PhysMaterial.Get())
@@ -50,10 +44,26 @@ void ABulletProjectTile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 			MultiplayDamageByPhysMat(Hit.PhysMaterial.Get());
 			UGameplayStatics::ApplyDamage(OtherActor, Damage, GetInstigatorController(), this,
 			                              UDamageType::StaticClass());
-
-			SpawnWidgetDamageIndicator(Hit.ImpactPoint, Hit.ImpactNormal.Rotation());
+			FRotator WidgetRotator = UKismetMathLibrary::FindLookAtRotation(
+				Hit.ImpactPoint, GetOwner()->GetActorLocation());
+			FVector WidgetLocation = Hit.ImpactPoint + (GetOwner()->GetActorLocation() - Hit.ImpactPoint).Normalize() *
+				10.0f;
+			
+			SpawnWidgetDamageIndicator(WidgetLocation, WidgetRotator);
 		}
+
+		SpawnHitEffectEmmiter(Hit);
+		
 	}
+}
+
+void ABulletProjectTile::SpawnHitEffectEmmiter(const FHitResult& Hit)
+{
+	if(ParticleSystemHitEffect == nullptr)
+		return;
+	
+	FTransform SpawnTransform = FTransform( Hit.ImpactNormal.Rotation(),Hit.ImpactPoint);
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),ParticleSystemHitEffect, SpawnTransform);
 }
 
 void ABulletProjectTile::MultiplayDamageByPhysMat(UPhysicalMaterial* PhysMat)
